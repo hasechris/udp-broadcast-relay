@@ -7,6 +7,12 @@ on:
       artifact-name:
         required: true
         type: string
+      buildarch_zig:
+        required: true
+        type: string
+      zigversion:
+        required: true
+        type: string
 
 jobs:
   build_and_upload:
@@ -17,13 +23,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: goto-bus-stop/setup-zig@v2
         with:
-          version: 0.11.0
-      - run: zig build-exe -target x86_64-linux-musl -lc -O ReleaseFast main.c
+          version: ${{ inputs.zigversion }}
+      - run: zig build-exe -target ${{ inputs.buildarch_zig }}-linux-musl -lc -O ReleaseFast main.c
       - run: mv main udp-broadcast-relay
       - run: chmod 755 udp-broadcast-relay
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}
+          name: ${{ inputs.artifact-name }}-${{ inputs.buildarch_zig }}
           path: udp-broadcast-relay
   
 ...

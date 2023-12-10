@@ -10,6 +10,12 @@ on:
       dumb-init-version:
         required: true
         type: string
+      buildarch_zig:
+        required: true
+        type: string
+      buildarch_buildx:
+        required: true
+        type: string
     secrets:
       DOCKER_USERNAME:
         required: true
@@ -30,13 +36,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}
-      - name: Fetch Github Release Asset
+          name: ${{ inputs.artifact-name }}-${{ inputs.buildarch_zig }}
+      - name: Fetch dumb-init initlike exe from releases
         uses: dsaltares/fetch-gh-release-asset@1.1.1
         with:
           repo: 'Yelp/dumb-init'
           version: '${{ inputs.dumb-init-version }}'
-          file: '${{ buildarch }}'
+          file: 'dumb-init_${{ inputs.buildarch_buildx }}'
       - run: ls -la
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -45,5 +51,6 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/udp-broadcast-relay:${{ inputs.artifact-name }}
           context: .
           file: Dockerfile.${{ inputs.artifact-name }}
+          platforms: linux/${{ inputs.buildarch_buildx }}
 
 ...
