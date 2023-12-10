@@ -27,6 +27,7 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
+      dumb-init-version: 1.25.1
       buildarch_zig: "x86_64"
       buildarch_buildx: "amd64"
 
