@@ -7,11 +7,14 @@ on:
 jobs:
   filechange_detection:
     runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
     permissions:
       contents: read
     outputs:
       changes_found_source: ${{ steps.filter.outputs.src }}
     steps:
+      - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
         id: changes
         with:
