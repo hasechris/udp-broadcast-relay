@@ -12,9 +12,12 @@ on:
     branches:
       - dev
 
-
 jobs:
+  filechange_detection:
+    uses: ./.github/workflows/reuseable_filechange_detection.yml
   build_and_upload:
+    needs: filechange_detection
+    if: needs.filechange_detection.changes_found_source == 'true'
     uses: ./.github/workflows/reuseable_build_and_upload.yml
     with:
       artifact-name: buildtest
@@ -22,7 +25,6 @@ jobs:
       zigversion: 0.11.0
   build_container:
     needs: build_and_upload
-    #if: github.event_name != 'pull_request' 
     uses: ./.github/workflows/reuseable_build_container.yml
     secrets: inherit
     with:
