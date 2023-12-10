@@ -1,5 +1,17 @@
+ARG USERID=1000
+ARG USERNAME=serviceuser
+
+# multistage build - stage 1 - create nonprivileged user in passwd file
+FROM alpine:latest AS resource-source
+RUN useradd --no-create-home -D -s /bin/false -u $USERID $USERNAME
+
+
+# multistage build - stage 2 - build the container image
 FROM scratch
-
+# get default alpine passwd
+COPY --from=resource-source /etc/passwd /etc/passwd
 COPY --chmod=755 udp-broadcast-relay /udp-broadcast-relay
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
+COPY --chmod=755 dump-init /dump-init
 
-ENTRYPOINT ["/udp-broadcast-relay"]
+ENTRYPOINT ["/dumb-init", "/entrypoint.sh"]

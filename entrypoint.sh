@@ -1,0 +1,3 @@
+#!/dumb-init /entrypoint.sh
+
+

@@ -8,6 +8,9 @@ on:
     types: opened
     branches: 
       - main
+  push:
+    branches:
+      - dev
 
 
 jobs:
