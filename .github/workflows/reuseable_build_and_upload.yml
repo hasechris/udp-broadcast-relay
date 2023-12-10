@@ -1,0 +1,29 @@
+name: reuseable - build and upload
+
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        required: true
+        type: string
+
+jobs:
+  build_and_upload:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.11.0
+      - run: zig build-exe -target x86_64-linux-musl -lc -O ReleaseFast main.c
+      - run: mv main udp-broadcast-relay
+      - run: chmod 755 udp-broadcast-relay
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: udp-broadcast-relay
+  
+  

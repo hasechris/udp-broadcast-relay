@@ -1,0 +1,22 @@
+name: main - buildtest for manual test or when PR
+
+
+on:
+  workflow_dispatch:
+  pull_request: 
+    types: opened
+    branches: 
+      - main
+
+
+jobs:
+  build_and_upload:
+    uses: ./.github/workflows/reuseable_build_and_upload.yml
+    with:
+      artifact-name: buildtest
+  build_container:
+    needs: build_and_upload
+    uses: ./.github/workflows/reuseable_build_container.yml
+    secrets: inherit
+    with:
+      artifact-name: buildtest
