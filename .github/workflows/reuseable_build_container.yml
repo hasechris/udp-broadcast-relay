@@ -42,7 +42,7 @@ jobs:
         with:
           repo: 'Yelp/dumb-init'
           version: '${{ inputs.dumb-init-version }}'
-          file: 'dumb-init_${{ inputs.buildarch_buildx }}'
+          file: 'dumb-init_${{ inputs.dumb-init-version }}_${{ inputs.buildarch_zig }}'
       - run: ls -la
       - name: Build and push
         uses: docker/build-push-action@v5
