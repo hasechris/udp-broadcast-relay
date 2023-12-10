@@ -1,5 +1,5 @@
+---
 name: reuseable - build and upload
-
 
 on:
   workflow_call:
@@ -26,4 +26,4 @@ jobs:
           name: ${{ inputs.artifact-name }}
           path: udp-broadcast-relay
   
-  
+...

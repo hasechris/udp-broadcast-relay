@@ -1,0 +1,8 @@
+FROM alpine:latest
+
+# install some debug tools
+RUN apk add --no-cache iproute2 procps ss tcpdump
+
+COPY --chmod=755 udp-broadcast-relay /udp-broadcast-relay
+
+ENTRYPOINT ["/udp-broadcast-relay"]

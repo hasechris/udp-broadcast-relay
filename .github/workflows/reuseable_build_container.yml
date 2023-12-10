@@ -1,3 +1,4 @@
+---
 name: reuseable - build container
 
 on:
@@ -11,8 +12,6 @@ on:
         required: true
       DOCKER_TOKEN:
         required: true
-
-
 
 jobs:
   build_container:
@@ -36,3 +35,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/udp-broadcast-relay:${{ inputs.artifact-name }}
           context: .
+          file: Dockerfile.${{ artifact-name }}
+
+...
