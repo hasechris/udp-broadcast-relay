@@ -16,9 +16,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
+      - run: git config --global --add safe.directory $GITHUB_WORKSPACE
       - run: ls -la
       - run: git checkout HEAD^
-      - run: git config --global --add safe.directory $GITHUB_WORKSPACE
       - uses: dorny/paths-filter@v2
         id: changes
         with:
