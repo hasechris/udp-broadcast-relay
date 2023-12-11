@@ -16,7 +16,7 @@ jobs:
   filechange_detection:
     uses: ./.github/workflows/reuseable_filechange_detection.yml
   build_and_upload:
-    if: needs.filechange_detection.changes_found_source == 'true'
+    if: needs.filechange_detection.changes_found_source == 'true' || needs.filechange_detection.changes_found_build_software == 'true' || needs.filechange_detection.changes_found_build_buildtest == 'true'
     uses: ./.github/workflows/reuseable_build_and_upload.yml
     with:
       artifact-name: buildtest
@@ -24,6 +24,7 @@ jobs:
       zigversion: 0.11.0
   build_container:
     needs: build_and_upload
+    if: needs.filechange_detection.changes_found_source == 'true' || needs.filechange_detection.changes_found_build_software == 'true' || needs.filechange_detection.changes_found_build_container == 'true' || needs.filechange_detection.changes_found_build_buildtest == 'true'
     uses: ./.github/workflows/reuseable_build_container.yml
     secrets: inherit
     with:
