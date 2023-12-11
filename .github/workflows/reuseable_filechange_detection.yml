@@ -14,7 +14,8 @@ jobs:
     steps:
       - run: apk add --no-cache git
       - uses: actions/checkout@v4
-        fetch-depth: 2
+        with:
+          fetch-depth: 2
       - run: ls -la
       - run: git checkout HEAD^
       - run: git config --global --add safe.directory $GITHUB_WORKSPACE
