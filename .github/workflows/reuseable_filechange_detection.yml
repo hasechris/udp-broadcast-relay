@@ -15,6 +15,7 @@ jobs:
       - run: apk add --no-cache git
       - uses: actions/checkout@v3
       - run: ls -la
+      - run: git config --global --add safe.directory .
       - uses: dorny/paths-filter@v2
         id: changes
         with:
