@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: alpine:latest
-    permissions:
-      contents: read
     outputs:
       changes_found_source: ${{ steps.filter.outputs.src }}
     steps:
