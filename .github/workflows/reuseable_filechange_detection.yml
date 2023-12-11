@@ -13,9 +13,11 @@ jobs:
       changes_found_source: ${{ steps.filter.outputs.src }}
     steps:
       - run: apk add --no-cache git
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        fetch-depth: 2
       - run: ls -la
-      - run: git config --global --add safe.directory .
+      - run: git checkout HEAD^
+      - run: git config --global --add safe.directory $GITHUB_WORKSPACE
       - uses: dorny/paths-filter@v2
         id: changes
         with:
