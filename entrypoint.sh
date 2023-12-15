@@ -5,11 +5,11 @@ options=""
 nics=$(ls /sys/class/net/ | grep -i "eth" )
 
 # check the needed options
-if [[ -z "${UBR_DEBUG}" ]]; then
+if [[ "${UBR_DEBUG}" == "true" ]] || [[ "${UBD_DEBUG}" == "1" ]]; then
     options+="-d "
 fi
 
-if [[ -z $(cat /etc/passwd | grep -i "serviceuser") ]]; then
+if [[ "${UBR_SERVICEUSER}" == "true" ]] || [[ "${UBR_SERVICEUSER}" == "1" ]]; then
     options+="-u serviceuser "
 fi
 
