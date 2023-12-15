@@ -11,9 +11,7 @@ jobs:
       image: alpine:latest
     outputs:
       changes_found_source: ${{ steps.filter.outputs.src }}
-      changes_found_workflow_build_software: ${{ steps.filter.outputs.workflow_build_software }}
-      changes_found_workflow_build_container: ${{ steps.filter.outputs.workflow_build_container }}
-      changes_found_workflow_build_buildtest: ${{ steps.filter.outputs.workflow_buildtest }}
+      changes_found_workflows: ${{ steps.filter.outputs.workflows }}
     steps:
       - run: apk add --no-cache git
       - uses: actions/checkout@v4
@@ -27,9 +25,8 @@ jobs:
           filters: |
             src: 
               - 'main.c'
-            workflow_build_software:
-              - '.github/workflows/reuseable_build_and_upload.yml'
-            workflow_build_container:
-              - '.github/workflows/reuseable_build_container.yml'
-            workflow_buildtest:
-              - '.github/workflows/main_buildtest.yml'
+              - 'udp-broadcast-relay.8'
+              - 'Makefile'
+              - 'ppp-if.up-local'
+            workflows:
+              - '.github/workflows/*'
