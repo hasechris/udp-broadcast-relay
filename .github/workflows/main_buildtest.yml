@@ -23,7 +23,9 @@ jobs:
       buildarch_zig: "x86_64"
       zigversion: 0.11.0
   build_container:
-    needs: build_and_upload
+    needs: 
+      - filechange_detection
+      - build_and_upload
     if: needs.filechange_detection.changes_found_source == 'true' || needs.filechange_detection.changes_found_build_software == 'true' || needs.filechange_detection.changes_found_build_container == 'true' || needs.filechange_detection.changes_found_build_buildtest == 'true'
     uses: ./.github/workflows/reuseable_build_container.yml
     secrets: inherit
