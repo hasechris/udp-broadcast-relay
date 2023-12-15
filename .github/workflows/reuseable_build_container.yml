@@ -52,6 +52,8 @@ jobs:
           context: .
           file: Dockerfile.${{ inputs.artifact-name }}
           platforms: linux/${{ inputs.buildarch_buildx }}
-          build-args: DUMB_INIT_VERSION=${{ inputs.dumb-init-version }},DUMB_INIT_ARCH=${{ inputs.buildarch_zig }}
+          build-args: |
+            DUMB_INIT_VERSION=${{ inputs.dumb-init-version }}
+            DUMB_INIT_ARCH=${{ inputs.buildarch_zig }}
 
 ...
