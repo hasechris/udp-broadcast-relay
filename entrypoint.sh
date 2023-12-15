@@ -1,5 +1,6 @@
 #!/bin/bash
 options=""
+ubrid_counter=1
 
 # get nic interfaces
 nics=$(ls /sys/class/net/ | grep -i "eth" )
@@ -15,4 +16,9 @@ fi
 
 
 # run udp relay
-/udp-broadcast-relay $options $UBR_ID $UBR_PORT $nics
+for port in $UBR_PORT
+do
+    echo "Starting Process for Port: $port"
+    /udp-broadcast-relay $options $ubrid_counter $port $nics &
+    ubrid_counter=$((ubrid_counter+1))
+done
