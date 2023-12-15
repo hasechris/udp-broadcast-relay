@@ -8,7 +8,7 @@ FROM alpine:latest
 #RUN useradd --no-create-home -D -s /bin/sh -u ${USERID} ${USERNAME}
 
 # install some debug tools
-RUN apk add --no-cache iproute2 procps ss tcpdump
+RUN apk add --no-cache iproute2 procps iproute2-ss tcpdump
 
 COPY --chmod=755 udp-broadcast-relay /udp-broadcast-relay
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
