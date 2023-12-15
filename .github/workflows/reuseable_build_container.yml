@@ -41,7 +41,7 @@ jobs:
         uses: dsaltares/fetch-gh-release-asset@1.1.1
         with:
           repo: 'Yelp/dumb-init'
-          version: '${{ inputs.dumb-init-version }}'
+          version: 'tags/${{ inputs.dumb-init-version }}'
           file: 'dumb-init_${{ inputs.dumb-init-version }}_${{ inputs.buildarch_zig }}'
       - run: ls -la
       - name: Build and push
