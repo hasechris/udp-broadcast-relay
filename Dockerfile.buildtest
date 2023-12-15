@@ -1,17 +1,17 @@
 ARG USERID=1000
 ARG USERNAME=serviceuser
-ARG DUMB_INIT_VERSION
-ARG DUMB_INIT_ARCH
+#ARG DUMB_INIT_VERSION
+#ARG DUMB_INIT_ARCH
 
 # in buildtest container we dont use multistaged built because we dont create a nearly empty container
 FROM alpine:latest
-RUN useradd --no-create-home -D -s /bin/sh -u ${USERID} ${USERNAME}
+#RUN useradd --no-create-home -D -s /bin/sh -u ${USERID} ${USERNAME}
 
 # install some debug tools
 RUN apk add --no-cache iproute2 procps ss tcpdump
 
 COPY --chmod=755 udp-broadcast-relay /udp-broadcast-relay
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
-COPY --chmod=755 dump-init_${DUMB_INIT_VERSION}_$[DUMB_INIT_ARCH} /dump-init
+COPY --chmod=755 dump-init_1.2.5_x86_64 /dump-init
 
 ENTRYPOINT ["/dumb-init", "/entrypoint.sh"]
