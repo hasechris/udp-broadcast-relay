@@ -12,6 +12,6 @@ FROM scratch
 COPY --from=resource-source /etc/passwd /etc/passwd
 COPY --chmod=755 udp-broadcast-relay /udp-broadcast-relay
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
-COPY --chmod=755 dump-init /dump-init
+COPY --chmod=755 dumb-init /dumb-init
 
 ENTRYPOINT ["/dumb-init", "/entrypoint.sh"]

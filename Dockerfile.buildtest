@@ -12,6 +12,6 @@ RUN apk add --no-cache iproute2 procps ss tcpdump
 
 COPY --chmod=755 udp-broadcast-relay /udp-broadcast-relay
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
-COPY --chmod=755 dump-init_1.2.5_x86_64 /dump-init
+COPY --chmod=755 dumb-init_1.2.5_x86_64 /dumb-init
 
 ENTRYPOINT ["/dumb-init", "/entrypoint.sh"]
