@@ -6,8 +6,6 @@ ARG USERNAME
 ARG DUMB_INIT_VERSION
 ARG DUMB_INIT_ARCH
 
-RUN echo "foobar huhu - ${USERID} - blub"
-
 RUN adduser -H -D -s /bin/sh -u ${USERID} ${USERNAME}
 
 # install some debug tools
@@ -15,6 +13,6 @@ RUN apk add --no-cache iproute2 procps iproute2-ss tcpdump
 
 COPY --chmod=755 udp-broadcast-relay /udp-broadcast-relay
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
-COPY --chmod=755 dumb-init_1.2.5_x86_64 /dumb-init
+COPY --chmod=755 dumb-init_${DUMB_INIT_VERSION}_${DUMB_INIT_ARCH} /dumb-init_${DUMB_INIT_VERSION}_${DUMB_INIT_ARCH}
 
-ENTRYPOINT ["/dumb-init", "/entrypoint.sh"]
+ENTRYPOINT ["/dumb-init_${DUMB_INIT_VERSION}_${DUMB_INIT_ARCH}", "/entrypoint.sh"]
