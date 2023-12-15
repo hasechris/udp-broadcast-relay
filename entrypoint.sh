@@ -22,3 +22,8 @@ do
     /udp-broadcast-relay $options $ubrid_counter $port $nics &
     ubrid_counter=$((ubrid_counter+1))
 done
+
+while :
+do
+    sleep 2
+done
