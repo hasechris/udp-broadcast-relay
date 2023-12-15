@@ -32,6 +32,7 @@ http://www.netfor2.com/ip.htm
 
 */
 
+
 #define MAXIFS	256
 #define DPRINT  if (debug) printf
 #define IPHEADER_LEN 20
