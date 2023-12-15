@@ -5,7 +5,7 @@ ARG DUMB_INIT_ARCH
 
 # in buildtest container we dont use multistaged built because we dont create a nearly empty container
 FROM alpine:latest
-RUN useradd --no-create-home -D -s /bin/sh -u ${USERID} ${USERNAME}
+RUN adduser -H -D -s /bin/sh -u ${USERID} ${USERNAME}
 
 # install some debug tools
 RUN apk add --no-cache iproute2 procps iproute2-ss tcpdump
