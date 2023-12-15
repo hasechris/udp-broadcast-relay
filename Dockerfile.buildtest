@@ -1,10 +1,10 @@
+# in buildtest container we dont use multistaged built because we dont create a nearly empty container
+FROM alpine:latest
+
 ARG USERID
 ARG USERNAME
 ARG DUMB_INIT_VERSION
 ARG DUMB_INIT_ARCH
-
-# in buildtest container we dont use multistaged built because we dont create a nearly empty container
-FROM alpine:latest
 
 RUN echo "foobar huhu - ${USERID} - blub"
 
