@@ -15,4 +15,4 @@ COPY --chmod=755 udp-broadcast-relay /udp-broadcast-relay
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 COPY --chmod=755 dumb-init_${DUMB_INIT_VERSION}_${DUMB_INIT_ARCH} /dumb-init_${DUMB_INIT_VERSION}_${DUMB_INIT_ARCH}
 
-ENTRYPOINT ["/dumb-init_${DUMB_INIT_VERSION}_${DUMB_INIT_ARCH}", "/entrypoint.sh"]
+ENTRYPOINT /dumb-init_${DUMB_INIT_VERSION}_${DUMB_INIT_ARCH} /entrypoint.sh
