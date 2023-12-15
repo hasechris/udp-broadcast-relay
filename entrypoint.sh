@@ -1,4 +1,4 @@
-#!/dumb-init /entrypoint.sh
+#!/bin/bash
 options=""
 
 # get nic interfaces
