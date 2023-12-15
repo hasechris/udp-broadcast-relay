@@ -1,7 +1,7 @@
 ARG USERID=1000
 ARG USERNAME=serviceuser
-#ARG DUMB_INIT_VERSION
-#ARG DUMB_INIT_ARCH
+ARG DUMB_INIT_VERSION
+ARG DUMB_INIT_ARCH
 
 # in buildtest container we dont use multistaged built because we dont create a nearly empty container
 FROM alpine:latest
