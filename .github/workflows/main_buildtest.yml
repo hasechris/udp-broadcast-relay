@@ -13,21 +13,14 @@ on:
       - dev
 
 jobs:
-  filechange_detection:
-    uses: ./.github/workflows/reuseable_filechange_detection.yml
   build_and_upload:
-    if: ${{ needs.filechange_detection.changes_found_source == 'true' || needs.filechange_detection.changes_found_workflows == 'true' }}
-    needs: filechange_detection
     uses: ./.github/workflows/reuseable_build_and_upload.yml
     with:
       artifact-name: buildtest
       buildarch_zig: "x86_64"
       zigversion: 0.11.0
   build_container:
-    needs: 
-      - filechange_detection
-      - build_and_upload
-    if: ${{ needs.filechange_detection.changes_found_source == 'true' || needs.filechange_detection.changes_found_workflows == 'true' }}
+    needs: build_and_upload
     uses: ./.github/workflows/reuseable_build_container.yml
     secrets: inherit
     with:
