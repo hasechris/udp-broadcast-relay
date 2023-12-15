@@ -11,6 +11,7 @@ if [[ "${UBR_DEBUG}" == "true" ]] || [[ "${UBD_DEBUG}" == "1" ]]; then
 fi
 
 if [[ "${UBR_SERVICEUSER}" == "true" ]] || [[ "${UBR_SERVICEUSER}" == "1" ]]; then
+    echo "OK, you specified to use a serviceuser. Will start the relay processes in serviceuser"
     options+="-u serviceuser "
 fi
 
