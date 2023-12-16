@@ -92,7 +92,7 @@ static int get_uid_from_username(const char *username, uid_t *uid) {
 
 int main(int argc,char **argv) {
     /* Debugging, forking, other settings */
-    int drop_to_uid = -1;
+    uid_t drop_to_uid = -1;
     int debug = 0, forking = 0;
     u_int16_t port = 0;
     u_char id = 0;
@@ -180,8 +180,8 @@ int main(int argc,char **argv) {
             /* detect if dropping privileges is wanted */
             i++;
             drop_to_uid = argv[i];
-            if (drop_to_uid == "") {
-                fprintf(stderr, "invalid user id specified: %d\n", argv[i]);
+            if (get_uid_from_username(argv[i], &drop_to_uid) != 0) {
+                fprintf(stderr, "Failed to resolve user %s to a valid UID\n", argv[i]);
                 exit(1);
             }
         }
