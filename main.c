@@ -92,7 +92,7 @@ static int get_uid_from_username(const char *username, uid_t *uid) {
 
 int main(int argc,char **argv) {
     /* Debugging, forking, other settings */
-    u_int16_t drop_to_uid = -1;
+    int drop_to_uid = -1;
     int debug = 0, forking = 0;
     u_int16_t port = 0;
     u_char id = 0;
@@ -181,7 +181,7 @@ int main(int argc,char **argv) {
             i++;
             drop_to_uid = argv[i];
             if (drop_to_uid == "") {
-                fprintf(stderr, "invalid user id specified: %s\n", argv[i]);
+                fprintf(stderr, "invalid user id specified: %d\n", argv[i]);
                 exit(1);
             }
         }
