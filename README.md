@@ -1,4 +1,4 @@
-UDP Broadcast Packet Relay
+UDP Broadcast Relay for Linux / FreeBSD / pfSense
 ==========================
 
 This program listens for packets on a specified UDP broadcast port. When
@@ -6,103 +6,94 @@ a packet is received, it sends that packet to all specified interfaces
 but the one it came from as though it originated from the original
 sender.
 
-The primary purpose of this is to allow games on machines on separated
-local networks (Ethernet, WLAN) that use udp broadcasts to find each
+The primary purpose of this is to allow devices or game servers on separated
+local networks (Ethernet, WLAN, VLAN) that use udp broadcasts to find each
 other to do so.
-
-It also works on ppp links, so you can log in from windows boxes (e.g.
-using pptp) and play LAN-based games together. Currently, you have to
-care about upcoming or downgoing interfaces yourself.
-
-Note that [it is possible to achieve this using `iptables` as
-well](https://odi.ch/weblog/posting.php?posting=731).
 
 INSTALL
 -------
 
-    make 
-    cp udp-broadcast-relay /some/where
+    make
+    cp udp-broadcast-relay-redux /some/where
 
 USAGE
 -----
 
-    /some/where/udp-broadcast-relay id udp-port eth0 eth1...
+```
+./udp-broadcast-relay-redux \
+    -id id \
+    --port <udp-port> \
+    --dev eth0 \
+    [--dev eth1...] \
+    [--multicast 224.0.0.251] \
+    [-s <spoof_source_ip>] \
+    [-t <overridden_target_ip>]
+```
 
-udp-broadcast-relay must be run as root to be able to create a raw
-socket (necessary) to send packets as though they originated from the
-original sender.
-
-COMPATIBILITY
--------------
-
--   I run debian woody with Linux 2.4.20, and here it works.
+- udp-broadcast-relay-redux must be run as root to be able to create a raw
+  socket (necessary) to send packets as though they originated from the
+  original sender.
+- `id` must be unique number between instances. This is used to set the TTL of
+  outgoing packets to determine if a packet is an echo and should be discarded.
+- Multicast groups can be joined and relayed with
+  `--multicast <group address>`.
+- The source address for all packets can be modified with `-s <ip>`. This
+  is unusual.
+- A special source ip of `-s 1.1.1.1` can be used to set the source ip
+  to the address of the outgoing interface.
+- A special destination ip of `-t 255.255.255.255` can be used to set the
+  overriden target ip to the broadcast address of the outgoing interface.
+- `-f` will fork the application to the background.
 
 EXAMPLE
 -------
 
-    /some/where/udp-broadcast-relay -f 1 6112 eth0 eth1  # forward Warcraft 3 broadcast packets
+#### mDNS / Multicast DNS (Chromecast Discovery + Bonjour + More)
+`./udp-broadcast-relay-redux --id 1 --port 5353 --dev eth0 --dev eth1 --multicast 224.0.0.251 -s 1.1.1.1`
 
-CONTRIBUTORS
------------------
+(Chromecast requires broadcasts to originate from an address on its subnet)
 
-Over the last years, various people submitted code to the project. Note that I
-do not use udp-broadcast-relay any more myself, so these changes were not
-tested by me.
+#### SSDP (Roku Discovery + More)
+`./udp-broadcast-relay-redux --id 1 --port 1900 --dev eth0 --dev eth1 --multicast 239.255.255.250`
 
--   Patrick Huesmann submitted a patch to make udp-broadcast-relay send
-    the packes to those NICs it did not recieve it from, based on the
-    actual socket, not the broadcast IP. This is useful if more than one
-    physical networks share the same broadcast range.
--   Савченко В. М. submitted an `ip-up.local` an `ip-down.local` file to
-    automatically restart udp-broadcast-relay when new ppp-interfaces
-    come up, see `ppp-if.up-local` for details.
--   Roman Hoog Antink contributed the option `-s` to spoof the source IP of
-    forwarded packages.
+#### Lifx Bulb Discovery
+`./udp-broadcast-relay-redux --id 1 --port 56700 --dev eth0 --dev eth1`
 
-Thanks to all contributors!
+#### Broadlink IR Emitter Discovery
+`./udp-broadcast-relay-redux --id 1 --port 80 --dev eth0 --dev eth1`
 
-BUGS/CRITICISM/PATCHES/ETC
---------------------------
+#### Warcraft 3 Server Discovery
+`./udp-broadcast-relay-redux --id 1 --port 6112 --dev eth0 --dev eth1`
 
--   Web: <http://www.joachim-breitner.de/udp-broadcast-relay/>
--   e-mail:   Joachim Breitner <<mail@joachim-breitner.de>>
--   Github: <https://github.com/nomeata/udp-broadcast-relay/>
+#### Relaying broadcasts between two LANs joined by tun-based VPN
+This example is from OpenWRT. Tun-based devices don't forward broadcast packets
+ so temporarily rewriting the destination address (and then re-writing it back)
+ is necessary.
 
-HISTORY
--------
+Router 1 (source):
 
-*   0.3 2003-09-28
+`./udp-broadcast-relay-redux --id 1 --port 6112 --dev br-lan --dev tun0 -t 10.66.2.13`
 
-    Sending packets also to ppp addresses
+(where 10.66.2.13 is the IP of router 2 over the tun0 link)
 
-*   0.2 2003-09-18
+Router 2 (target):
 
-    Flags for debugging and forking, Compilefixes, Makefile-Target
-    "clean"
+`./udp-broadcast-relay-redux --id 2 --port 6112 --dev br-lan --dev tun0 -t 255.255.255.255`
 
-*   0.1 2003-09-15
+#### HDHomerun Discovery
+`./udp-broadcast-relay-redux --id 1 --port 65001 --dev eth0 --dev eth1`
 
-    Initial rewrite of udp_broadcast_fw
+Note about firewall rules
+---
 
-CREDITS
--------
+If you are running udp-broadcast-relay-redux on a router, it can be an easy
+way to relay broadcasts between VLANs. However, beware that these broadcasts
+will not establish a RELATED firewall relationship between the source and
+destination addresses.
 
-This is based upon [udp_broadcast_fw](http://www.serverquery.com/udp_broadcast_fw/) by Nathan O'Sullivan.
-
-HISTORY of udp_broadcast_fw
----------------------------
-
-*   0.1.1 - 19 Feb 02
-
-    Moved fork() code to just before main loop so that errors would
-    appear
-
-*   0.1 - 18 Feb 02
-
-    Initial release
-
-LICENSE
--------
-
-This code is made available under the GPL. Read the COPYING file inside
-the archive for more info.
+This means if you have strict firewall rules, the recipient may not be able
+to respond to the broadcaster. For instance, the SSDP protocol involves
+sending a broadcast packet to port 1900 to discover devices on the network.
+The devices then respond to the broadcast with a unicast packet back to the
+original sender. You will need to make sure that your firewall rules allow
+these response packets to make it back to the original sender.
