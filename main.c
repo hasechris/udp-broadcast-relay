@@ -77,8 +77,22 @@ void inet_ntoa2(struct in_addr in, char* chr, int len) {
     strncpy(chr, from, len);
 }
 
+static int get_uid_from_username(const char *username, uid_t *uid) {
+	struct passwd *pwd;
+
+	pwd = getpwnam(username);
+
+	if (pwd == NULL) {
+		return -ENOENT;
+	}
+
+	*uid = pwd->pw_uid;
+	return 0;
+}
+
 int main(int argc,char **argv) {
     /* Debugging, forking, other settings */
+    u_int16_t drop_to_uid = -1;
     int debug = 0, forking = 0;
     u_int16_t port = 0;
     u_char id = 0;
@@ -104,24 +118,34 @@ int main(int argc,char **argv) {
     rcv_msg.msg_controllen = sizeof(pkt_infos);
 
     if(argc < 2) {
-        fprintf(stderr,"usage: %s [-d] [-f] [-s IP] [-t IP] [--id id] [--port udp-port] [--dev dev1]... [--multicast ip]...\n\n",*argv);
+        fprintf(stderr,"usage: %s [-d] [-f] [-s IP] [-t IP] [-u <userid>] [--id id] [--port udp-port] [--dev dev1]... [--multicast ip]...\n\n",*argv);
         fprintf(stderr,"This program listens for broadcast  packets  on the  specified UDP port\n"
             "and then forwards them to each other given interface.  Packets are sent\n"
             "such that they appear to have come from the original broadcaster, resp.\n"
             "from the spoofing IP in case -s is used.  When using multiple instances\n"
             "for the same port on the same network, they must have a different id.\n\n"
-            "    -d      enables debugging\n"
-            "    -f      forces forking to background\n"
-            "    -s IP   sets the source IP of forwarded packets; otherwise the\n"
-            "            original sender's address is used.\n"
-            "            Setting to 1.1.1.1 uses outgoing interface address and broadcast port.\n"
-            "            (helps in some rare cases)\n"
-            "            Setting to 1.1.1.2 uses outgoing interface address and source port.\n"
-            "            (helps in some rare cases)\n"
-            "    -t      sets the destination IP of forwarded packets; otherwise the\n"
-            "            original target is used.\n"
-            "            Setting to 255.255.255.255 uses the broadcast address of the\n"
-            "            outgoing interface.\n"
+            "    -d              enables debugging\n"
+            "\n"
+            "    -f              forces forking to background\n"
+            "\n"
+            "    -s IP           sets the source IP of forwarded packets; otherwise the\n"
+            "                    original sender's address is used.\n"
+            "                    Setting to 1.1.1.1 uses outgoing interface address and broadcast port.\n"
+            "                    (helps in some rare cases)\n"
+            "                    Setting to 1.1.1.2 uses outgoing interface address and source port.\n"
+            "                    (helps in some rare cases)\n"
+            "\n"
+            "    -t              sets the destination IP of forwarded packets; otherwise the\n"
+            "                    original target is used.\n"
+            "                    Setting to 255.255.255.255 uses the broadcast address of the\n"
+            "                    outgoing interface.\n"
+            "\n"
+            "--port <number>     the UDP port number"
+            "\n"
+            "--dev ifname        Specified multiple times for all network interfaces on which the broad-\n"
+            "                    or multicast should be received or transmitted."
+            "\n"
+            "--multicast         Multicast groups can be joined and relayed with --multicast <group address>"
             "\n"
         );
         exit(1);
@@ -151,6 +175,15 @@ int main(int argc,char **argv) {
                 exit(1);
             }
             DPRINT ("Outgoing source IP set to %s\n", argv[i]);
+        }
+        else if (strcmp(argv[i],"-u") == 0) {
+            /* detect if dropping privileges is wanted */
+            i++;
+            drop_to_uid = argv[i];
+            if (drop_to_uid == "") {
+                fprintf(stderr, "invalid user id specified: %s\n", argv[i]);
+                exit(1);
+            }
         }
         else if (strcmp(argv[i],"-t") == 0) {
             struct in_addr converted;
@@ -442,6 +475,14 @@ int main(int argc,char **argv) {
         fclose(stdout);
         fclose(stderr);
     }
+
+	if (drop_to_uid != -1) {
+		DPRINT("Dropping to UID %d\n", drop_to_uid);
+		if (0 != setreuid(drop_to_uid, drop_to_uid)) {
+			fprintf(stderr, "Failed to drop to UID %d\n", drop_to_uid);
+			exit(1);
+		}
+	}
 
     for (;;) /* endless loop */
     {
