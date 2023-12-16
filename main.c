@@ -179,7 +179,6 @@ int main(int argc,char **argv) {
         else if (strcmp(argv[i],"-u") == 0) {
             /* detect if dropping privileges is wanted */
             i++;
-            drop_to_uid = argv[i];
             if (get_uid_from_username(argv[i], &drop_to_uid) != 0) {
                 fprintf(stderr, "Failed to resolve user %s to a valid UID\n", argv[i]);
                 exit(1);
