@@ -118,7 +118,7 @@ int main(int argc,char **argv) {
     rcv_msg.msg_controllen = sizeof(pkt_infos);
 
     if(argc < 2) {
-        fprintf(stderr,"usage: %s [-d] [-f] [-s IP] [-t IP] [-u <userid>] [--id id] [--port udp-port] [--dev dev1]... [--multicast ip]...\n\n",*argv);
+        fprintf(stderr,"usage: %s [-d] [-f] [-s IP] [-t IP] [-u <username>] [--id id] [--port udp-port] [--dev dev1]... [--multicast ip]...\n\n",*argv);
         fprintf(stderr,"This program listens for broadcast  packets  on the  specified UDP port\n"
             "and then forwards them to each other given interface.  Packets are sent\n"
             "such that they appear to have come from the original broadcaster, resp.\n"
@@ -139,6 +139,8 @@ int main(int argc,char **argv) {
             "                    original target is used.\n"
             "                    Setting to 255.255.255.255 uses the broadcast address of the\n"
             "                    outgoing interface.\n"
+            "\n"
+            "    -u <username>   [Optional] drops the processes to another user on execution, so the processes dont run via root permissions."
             "\n"
             "--port <number>     the UDP port number"
             "\n"
