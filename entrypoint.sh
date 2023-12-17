@@ -75,10 +75,13 @@ if [ ! -z "${UBR_PORTS}" ]; then
     for port in $UBR_PORTS
     do
         echo "Starting Process for Port: $port"
-        if [[ "${list_of_predefined_ports}" == *"${port}"* ]]; then
-            echo "WARNING: You specified a port from a pre-defined option in your custom udp port list. Delete this port immediatly! Port: $port"
-            continue
-        fi
+        for test_port in $list_of_predefined_ports
+        do
+            if [[ "${test_port}" == "${port}" ]]; then
+                echo "WARNING: You specified a port from a pre-defined option in your custom udp port list UBR_PORTS. Delete this port immediatly! Port: $port"
+                exit 1
+            fi
+        done
         /udp-broadcast-relay $options --id $ubrid_counter --port $port $nics &
         ubrid_counter=$((ubrid_counter+1))
     done
