@@ -6,6 +6,7 @@
 #
 options=""
 ubrid_counter=1
+list_of_predefined_ports=""
 
 ###############################
 #
@@ -22,7 +23,7 @@ if [[ "${UBR_DEBUG}" == "true" ]] || [[ "${UBD_DEBUG}" == "1" ]]; then
 fi
 
 if [[ "${UBR_SERVICEUSER}" == "true" ]] || [[ "${UBR_SERVICEUSER}" == "1" ]]; then
-    echo "OK, you specified to use a serviceuser. Will start the relay processes in serviceuser"
+    echo "OK, you specified to use a serviceuser. Will start the relay processes in user: nobody"
     options+="-u nobody "
 fi
 
@@ -35,28 +36,33 @@ if [[ "${UBR_ENABLE_MDNS}" == "true" ]] || [[ "${UBR_ENABLE_MDNS}" == "1" ]]; th
     echo "I shall start the mDNS Reflector on all interfaces. Starting now..."
     /udp-broadcast-relay $options --id $ubrid_counter --port 5353 --multicast 224.0.0.251 -s 1.1.1.1 $nics &
     ubrid_counter=$((ubrid_counter+1))
+    list_of_predefined_ports+="5353 "
 fi
 
 if [[ "${UBR_ENABLE_SSDP}" == "true" ]] || [[ "${UBR_ENABLE_SSDP}" == "1" ]]; then
     echo "I shall start the SSDP Reflector on all interfaces. Starting now..."
     /udp-broadcast-relay $options --id $ubrid_counter --port 1900 --multicast 239.255.255.250 $nics &
     ubrid_counter=$((ubrid_counter+1))
+    list_of_predefined_ports+="1900 "
 fi
 if [[ "${UBR_ENABLE_LIFX_BULB}" == "true" ]] || [[ "${UBR_ENABLE_LIFX_BULB}" == "1" ]]; then
     echo "I shall start the LIFX Bulb Reflector on all interfaces. Starting now..."
     /udp-broadcast-relay $options --id $ubrid_counter --port 56700 $nics &
     ubrid_counter=$((ubrid_counter+1))
+    list_of_predefined_ports+="56700 "
 fi
 if [[ "${UBR_ENABLE_HDHOMERUN}" == "true" ]] || [[ "${UBR_ENABLE_HDHOMERUN}" == "1" ]]; then
     echo "I shall start the HDHomerun Reflector on all interfaces. Starting now..."
     /udp-broadcast-relay $options --id $ubrid_counter --port 65001 $nics &
     ubrid_counter=$((ubrid_counter+1))
+    list_of_predefined_ports+="65001 "
 fi
 
 if [[ "${UBR_ENABLE_WC3}" == "true" ]] || [[ "${UBR_ENABLE_WC3}" == "1" ]]; then
     echo "I shall start the Warcraft 3 Reflector on all interfaces. Starting now..."
     /udp-broadcast-relay $options --id $ubrid_counter --port 6112 $nics &
     ubrid_counter=$((ubrid_counter+1))
+    list_of_predefined_ports+="6112 "
 fi
 
 
@@ -69,6 +75,10 @@ if [ ! -z "${UBR_PORTS}" ]; then
     for port in $UBR_PORTS
     do
         echo "Starting Process for Port: $port"
+        if [[ "${list_of_predefined_ports}" == *"${port}"* ]]
+            echo "WARNING: You specified a port from a pre-defined option in your custom udp port list. Delete this port immediatly! Port: $port"
+            continue
+        fi
         /udp-broadcast-relay $options --id $ubrid_counter --port $port $nics &
         ubrid_counter=$((ubrid_counter+1))
     done
