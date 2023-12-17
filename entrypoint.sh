@@ -75,7 +75,7 @@ if [ ! -z "${UBR_PORTS}" ]; then
     for port in $UBR_PORTS
     do
         echo "Starting Process for Port: $port"
-        if [[ "${list_of_predefined_ports}" == *"${port}"* ]]
+        if [[ "${list_of_predefined_ports}" == *"${port}"* ]]; then
             echo "WARNING: You specified a port from a pre-defined option in your custom udp port list. Delete this port immediatly! Port: $port"
             continue
         fi
