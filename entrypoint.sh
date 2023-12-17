@@ -64,7 +64,7 @@ fi
 #
 # Main Loop if user specified UBR_PORT portnumbers
 #
-if [[ -z "${UBR_PORTS}" ]]; then
+if [ ! -z "${UBR_PORTS}" ]; then
     echo "Compose defines a list of custom udp ports."
     for port in $UBR_PORTS
     do
