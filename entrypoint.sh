@@ -3,7 +3,7 @@ options=""
 ubrid_counter=1
 
 # get nic interfaces
-nics=$(ls /sys/class/net/ | grep -i "eth" )
+nics=$(ls /sys/class/net/ | grep -i "eth" | sed 's/.*/--dev &/')
 
 # check the needed options
 if [[ "${UBR_DEBUG}" == "true" ]] || [[ "${UBD_DEBUG}" == "1" ]]; then
@@ -12,7 +12,7 @@ fi
 
 if [[ "${UBR_SERVICEUSER}" == "true" ]] || [[ "${UBR_SERVICEUSER}" == "1" ]]; then
     echo "OK, you specified to use a serviceuser. Will start the relay processes in serviceuser"
-    options+="-u serviceuser "
+    options+="-u nobody "
 fi
 
 
@@ -20,7 +20,7 @@ fi
 for port in $UBR_PORT
 do
     echo "Starting Process for Port: $port"
-    /udp-broadcast-relay $options $ubrid_counter $port $nics &
+    /udp-broadcast-relay $options --id $ubrid_counter --port $port $nics &
     ubrid_counter=$((ubrid_counter+1))
 done
 

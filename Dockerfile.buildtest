@@ -6,8 +6,6 @@ ARG USERNAME
 ARG DUMB_INIT_VERSION
 ARG DUMB_INIT_ARCH
 
-RUN adduser -H -D -s /bin/sh -u ${USERID} ${USERNAME}
-
 # install some debug tools
 RUN apk add --no-cache bash iproute2 procps iproute2-ss tcpdump
 
