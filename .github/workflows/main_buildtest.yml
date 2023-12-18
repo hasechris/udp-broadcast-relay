@@ -12,9 +12,6 @@ on:
     branches:
       - dev
 
-env:
-  zig_version: 0.11.0
-  dumb_init_version: 1.2.5
 
 jobs:
   ##############################################
@@ -28,7 +25,7 @@ jobs:
       zig_buildarch: "x86_64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
-      zig_version: ${{ env.zig_version }}
+      zig_version: 0.11.0
 
   build_and_upload_x86:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
@@ -37,7 +34,7 @@ jobs:
       zig_buildarch: "x86"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
-      zig_version: ${{ env.zig_version }}
+      zig_version: 0.11.0
 
   build_and_upload_raspi1_raspicm1_raspizero1:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
@@ -47,7 +44,7 @@ jobs:
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
       zig_buildcpu: "-mcpu=arm1176jzf_s"
-      zig_version: ${{ env.zig_version }}
+      zig_version: 0.11.0
 
   build_and_upload_raspi2:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
@@ -57,7 +54,7 @@ jobs:
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
       zig_buildcpu: "-mcpu=cortex_a7"
-      zig_version: ${{ env.zig_version }}
+      zig_version: 0.11.0
 
   build_and_upload_raspi2v12_raspi3_raspizero2w_32bit:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
@@ -67,7 +64,7 @@ jobs:
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
       zig_buildcpu: "-mcpu=cortex_a53"
-      zig_version: ${{ env.zig_version }}
+      zig_version: 0.11.0
 
   build_and_upload_raspi2v12_raspi3_raspizero2w_64bit:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
@@ -77,7 +74,7 @@ jobs:
       zig_buildos: "linux"
       zig_buildlibc: "musl"
       zig_buildcpu: "-mcpu=cortex_a53"
-      zig_version: ${{ env.zig_version }}
+      zig_version: 0.11.0
 
   build_and_upload_raspi4_raspicm4_rpi400:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
@@ -87,7 +84,7 @@ jobs:
       zig_buildos: "linux"
       zig_buildlibc: "musl"
       zig_buildcpu: "-mcpu=cortex_a72"
-      zig_version: ${{ env.zig_version }}
+      zig_version: 0.11.0
 
   ##############################################
   #
@@ -99,7 +96,7 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: ${{ env.dumb_init_version }}
+      dumb-init-version: 1.2.5
       buildarch_zig: "x86_64"
       buildarch_buildx: "amd64"
 
@@ -109,7 +106,7 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: ${{ env.dumb_init_version }}
+      dumb-init-version: 1.2.5
       buildarch_zig: "x86_64"
       buildarch_buildx: "amd64"
 
