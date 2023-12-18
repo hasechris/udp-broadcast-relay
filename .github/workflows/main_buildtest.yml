@@ -25,6 +25,7 @@ jobs:
       zig_buildarch: "x86_64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
+      zig_buildcpu: "x86_64_v4"
       zig_version: 0.11.0
 
   build_and_upload_x86:
@@ -34,6 +35,7 @@ jobs:
       zig_buildarch: "x86"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
+      zig_buildcpu: "i686"
       zig_version: 0.11.0
 
   build_and_upload_raspi1_raspicm1_raspizero1:
@@ -43,7 +45,7 @@ jobs:
       zig_buildarch: "arm"
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
-      zig_buildcpu: "-mcpu=arm1176jzf_s"
+      zig_buildcpu: "arm1176jzf_s"
       zig_version: 0.11.0
 
   build_and_upload_raspi2:
@@ -53,7 +55,7 @@ jobs:
       zig_buildarch: "arm"
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
-      zig_buildcpu: "-mcpu=cortex_a7"
+      zig_buildcpu: "cortex_a7"
       zig_version: 0.11.0
 
   build_and_upload_raspi2v12_raspi3_raspizero2w_32bit:
@@ -63,7 +65,7 @@ jobs:
       zig_buildarch: "arm"
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
-      zig_buildcpu: "-mcpu=cortex_a53"
+      zig_buildcpu: "cortex_a53"
       zig_version: 0.11.0
 
   build_and_upload_raspi2v12_raspi3_raspizero2w_64bit:
@@ -73,7 +75,7 @@ jobs:
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
-      zig_buildcpu: "-mcpu=cortex_a53"
+      zig_buildcpu: "cortex_a53"
       zig_version: 0.11.0
 
   build_and_upload_raspi4_raspicm4_rpi400:
@@ -83,7 +85,7 @@ jobs:
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
-      zig_buildcpu: "-mcpu=cortex_a72"
+      zig_buildcpu: "cortex_a72"
       zig_version: 0.11.0
 
   ##############################################

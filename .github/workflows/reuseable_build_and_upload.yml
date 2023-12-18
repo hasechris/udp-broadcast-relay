@@ -34,10 +34,10 @@ jobs:
         with:
           version: ${{ inputs.zig_version }}
       - name: Compile udp-broadcast-relay-redux with Zig Compiler
-        run: zig build-exe -target ${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }} ${{ inputs.zig_buildcpu }} -lc -O ReleaseSmall --name udp-broadcast-relay-redux main.c
+        run: zig build-exe -target ${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }} -mcpu=${{ inputs.zig_buildcpu }} -lc -O ReleaseSmall --name udp-broadcast-relay-redux main.c
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}-${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }}${{ '-' + inputs.zig_buildcpu }}
+          name: ${{ inputs.artifact-name }}-${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }}-${{ inputs.zig_buildcpu }}
           path: udp-broadcast-relay-redux
   
 ...
