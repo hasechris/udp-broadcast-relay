@@ -1,0 +1,28 @@
+---
+name: main - Release new version of container (run from schedule or from PR close on merge)
+
+
+on:
+  pull_request: 
+    types: closed
+    branches: 
+      - main
+
+jobs:
+  build_and_upload_amd64:
+    uses: ./.github/workflows/reuseable_build_and_upload.yml
+    with:
+      artifact-name: buildtest
+      buildarch_zig: "x86_64"
+      zigversion: 0.11.0
+  build_container_amd64:
+    needs: build_and_upload
+    uses: ./.github/workflows/reuseable_build_container.yml
+    secrets: inherit
+    with:
+      artifact-name: buildtest
+      dumb-init-version: 1.2.5
+      buildarch_zig: "x86_64"
+      buildarch_buildx: "amd64"
+
+...

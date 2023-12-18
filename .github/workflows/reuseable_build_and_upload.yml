@@ -7,10 +7,19 @@ on:
       artifact-name:
         required: true
         type: string
-      buildarch_zig:
+      zig_buildarch:
         required: true
         type: string
-      zigversion:
+      zig_buildos:
+        required: true
+        type: string
+      zig_buildlibc:
+        required: true
+        type: string
+      zig_buildcpu:
+        required: false
+        type: string
+      zig_version:
         required: true
         type: string
 
@@ -23,13 +32,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: goto-bus-stop/setup-zig@v2
         with:
-          version: ${{ inputs.zigversion }}
-      - run: zig build-exe -target ${{ inputs.buildarch_zig }}-linux-musl -lc -O ReleaseFast main.c
-      - run: mv main udp-broadcast-relay
-      - run: chmod 755 udp-broadcast-relay
+          version: ${{ inputs.zig_version }}
+      - name: Compile udp-broadcast-relay-redux with Zig Compiler
+        run: zig build-exe -target ${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }} ${{ inputs.zig_buildcpu }} -lc -O ReleaseSmall --name udp-broadcast-relay-redux main.c
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}-${{ inputs.buildarch_zig }}
-          path: udp-broadcast-relay
+          name: ${{ inputs.artifact-name }}-${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }}${{ '-' + inputs.zig_buildcpu }}
+          path: udp-broadcast-relay-redux
   
 ...

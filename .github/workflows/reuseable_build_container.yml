@@ -57,6 +57,5 @@ jobs:
           build-args: |
             DUMB_INIT_VERSION=${{ inputs.dumb-init-version }}
             DUMB_INIT_ARCH=${{ inputs.buildarch_zig }}
-            USERID=1000
-            USERNAME=serviceuser
+
 ...

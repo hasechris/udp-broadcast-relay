@@ -34,33 +34,33 @@ fi
 #
 if [[ "${UBR_ENABLE_MDNS}" == "true" ]] || [[ "${UBR_ENABLE_MDNS}" == "1" ]]; then
     echo "I shall start the mDNS Reflector on all interfaces. Starting now..."
-    /udp-broadcast-relay $options --id $ubrid_counter --port 5353 --multicast 224.0.0.251 -s 1.1.1.1 $nics &
+    /udp-broadcast-relay-redux $options --id $ubrid_counter --port 5353 --multicast 224.0.0.251 -s 1.1.1.1 $nics &
     ubrid_counter=$((ubrid_counter+1))
     list_of_predefined_ports+="5353 "
 fi
 
 if [[ "${UBR_ENABLE_SSDP}" == "true" ]] || [[ "${UBR_ENABLE_SSDP}" == "1" ]]; then
     echo "I shall start the SSDP Reflector on all interfaces. Starting now..."
-    /udp-broadcast-relay $options --id $ubrid_counter --port 1900 --multicast 239.255.255.250 $nics &
+    /udp-broadcast-relay-redux $options --id $ubrid_counter --port 1900 --multicast 239.255.255.250 $nics &
     ubrid_counter=$((ubrid_counter+1))
     list_of_predefined_ports+="1900 "
 fi
 if [[ "${UBR_ENABLE_LIFX_BULB}" == "true" ]] || [[ "${UBR_ENABLE_LIFX_BULB}" == "1" ]]; then
     echo "I shall start the LIFX Bulb Reflector on all interfaces. Starting now..."
-    /udp-broadcast-relay $options --id $ubrid_counter --port 56700 $nics &
+    /udp-broadcast-relay-redux $options --id $ubrid_counter --port 56700 $nics &
     ubrid_counter=$((ubrid_counter+1))
     list_of_predefined_ports+="56700 "
 fi
 if [[ "${UBR_ENABLE_HDHOMERUN}" == "true" ]] || [[ "${UBR_ENABLE_HDHOMERUN}" == "1" ]]; then
     echo "I shall start the HDHomerun Reflector on all interfaces. Starting now..."
-    /udp-broadcast-relay $options --id $ubrid_counter --port 65001 $nics &
+    /udp-broadcast-relay-redux $options --id $ubrid_counter --port 65001 $nics &
     ubrid_counter=$((ubrid_counter+1))
     list_of_predefined_ports+="65001 "
 fi
 
 if [[ "${UBR_ENABLE_WC3}" == "true" ]] || [[ "${UBR_ENABLE_WC3}" == "1" ]]; then
     echo "I shall start the Warcraft 3 Reflector on all interfaces. Starting now..."
-    /udp-broadcast-relay $options --id $ubrid_counter --port 6112 $nics &
+    /udp-broadcast-relay-redux $options --id $ubrid_counter --port 6112 $nics &
     ubrid_counter=$((ubrid_counter+1))
     list_of_predefined_ports+="6112 "
 fi
@@ -82,7 +82,7 @@ if [ ! -z "${UBR_PORTS}" ]; then
                 exit 1
             fi
         done
-        /udp-broadcast-relay $options --id $ubrid_counter --port $port $nics &
+        /udp-broadcast-relay-redux $options --id $ubrid_counter --port $port $nics &
         ubrid_counter=$((ubrid_counter+1))
     done
 fi
