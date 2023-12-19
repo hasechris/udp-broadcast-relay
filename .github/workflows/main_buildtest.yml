@@ -58,15 +58,15 @@ jobs:
       zig_buildcpu: "cortex_a7"
       zig_version: 0.11.0
 
-  build_and_upload_raspi2v12_raspi3_raspizero2w_32bit:
-    uses: ./.github/workflows/reuseable_build_and_upload.yml
-    with:
-      artifact-name: buildtest
-      zig_buildarch: "arm"
-      zig_buildos: "linux"
-      zig_buildlibc: "musleabihf"
-      zig_buildcpu: "cortex_a53"
-      zig_version: 0.11.0
+  # build_and_upload_raspi2v12_raspi3_raspizero2w_32bit:
+  #   uses: ./.github/workflows/reuseable_build_and_upload.yml
+  #   with:
+  #     artifact-name: buildtest
+  #     zig_buildarch: "arm"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musleabihf"
+  #     zig_buildcpu: "cortex_a53"
+  #     zig_version: 0.11.0
 
   build_and_upload_raspi2v12_raspi3_raspizero2w_64bit:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
@@ -132,7 +132,7 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      buildx_buildarch: "armv6"
+      buildx_buildarch: "arm/v6"
       zig_buildarch: "arm"
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
@@ -144,29 +144,29 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      buildx_buildarch: "armv7"
+      buildx_buildarch: "arm/v7"
       zig_buildarch: "arm"
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
       zig_buildcpu: "cortex_a7"
-  build_container_raspi2v12_raspi3_raspizero2w_32bit:
-    needs: build_and_upload_raspi2v12_raspi3_raspizero2w_32bit
-    uses: ./.github/workflows/reuseable_build_container.yml
-    secrets: inherit
-    with:
-      artifact-name: buildtest
-      buildx_buildarch: "armv8"
-      zig_buildarch: "arm"
-      zig_buildos: "linux"
-      zig_buildlibc: "musleabihf"
-      zig_buildcpu: "cortex_a53"
+  # build_container_raspi2v12_raspi3_raspizero2w_32bit:
+  #   needs: build_and_upload_raspi2v12_raspi3_raspizero2w_32bit
+  #   uses: ./.github/workflows/reuseable_build_container.yml
+  #   secrets: inherit
+  #   with:
+  #     artifact-name: buildtest
+  #     buildx_buildarch: "armv8"
+  #     zig_buildarch: "arm"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musleabihf"
+  #     zig_buildcpu: "cortex_a53"
   build_container_raspi2v12_raspi3_raspizero2w_64bit:
     needs: build_and_upload_raspi2v12_raspi3_raspizero2w_64bit
     uses: ./.github/workflows/reuseable_build_container.yml
     secrets: inherit
     with:
       artifact-name: buildtest
-      buildx_buildarch: "arm64"
+      buildx_buildarch: "arm64/v8"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
@@ -177,7 +177,7 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      buildx_buildarch: "arm64"
+      buildx_buildarch: "arm64/v8"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
@@ -188,7 +188,7 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      buildx_buildarch: "arm64"
+      buildx_buildarch: "arm64/v8"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
