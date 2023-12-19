@@ -10,10 +10,22 @@ on:
       dumb-init-version:
         required: true
         type: string
-      buildarch_zig:
+      buildx_buildarch:
         required: true
         type: string
-      buildarch_buildx:
+      zig_buildarch:
+        required: true
+        type: string
+      zig_buildos:
+        required: true
+        type: string
+      zig_buildlibc:
+        required: true
+        type: string
+      zig_buildcpu:
+        required: false
+        type: string
+      zig_version:
         required: true
         type: string
     secrets:
@@ -38,13 +50,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}-${{ inputs.buildarch_zig }}
+          name: ${{ inputs.artifact-name }}-${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }}-${{ inputs.zig_buildcpu }}
       - name: Fetch dumb-init initlike exe from releases
         uses: dsaltares/fetch-gh-release-asset@1.1.1
         with:
           repo: 'Yelp/dumb-init'
           version: 'tags/v${{ inputs.dumb-init-version }}'
-          file: 'dumb-init_${{ inputs.dumb-init-version }}_${{ inputs.buildarch_zig }}'
+          file: 'dumb-init_${{ inputs.dumb-init-version }}_${{ inputs.zig_buildarch }}'
       - run: ls -la
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -53,9 +65,9 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/udp-broadcast-relay:${{ inputs.artifact-name }}
           context: .
           file: Dockerfile.${{ inputs.artifact-name }}
-          platforms: linux/${{ inputs.buildarch_buildx }}
+          platforms: ${{ inputs.zig_buildos }}/${{ inputs.buildx_buildarch }}
           build-args: |
             DUMB_INIT_VERSION=${{ inputs.dumb-init-version }}
-            DUMB_INIT_ARCH=${{ inputs.buildarch_zig }}
+            DUMB_INIT_ARCH=${{ inputs.zig_buildarch }}
 
 ...
