@@ -25,9 +25,6 @@ on:
       zig_buildcpu:
         required: false
         type: string
-      zig_version:
-        required: true
-        type: string
     secrets:
       DOCKER_USERNAME:
         required: true

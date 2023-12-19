@@ -109,7 +109,7 @@ jobs:
     with:
       artifact-name: buildtest
       dumb-init-version: 1.2.5
-      buildarch_buildx: "amd64"
+      buildx_buildarch: "amd64"
       zig_buildarch: "x86_64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
@@ -122,7 +122,7 @@ jobs:
     with:
       artifact-name: buildtest
       dumb-init-version: 1.2.5
-      buildarch_buildx: "386"
+      buildx_buildarch: "386"
       zig_buildarch: "x86"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
