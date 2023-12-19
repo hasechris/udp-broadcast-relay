@@ -108,7 +108,6 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: 1.2.5
       buildx_buildarch: "amd64"
       zig_buildarch: "x86_64"
       zig_buildos: "linux"
@@ -121,7 +120,6 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: 1.2.5
       buildx_buildarch: "386"
       zig_buildarch: "x86"
       zig_buildos: "linux"
@@ -134,7 +132,6 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: 1.2.5
       buildx_buildarch: "armv6"
       zig_buildarch: "arm"
       zig_buildos: "linux"
@@ -147,7 +144,6 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: 1.2.5
       buildx_buildarch: "armv7"
       zig_buildarch: "arm"
       zig_buildos: "linux"
@@ -159,7 +155,6 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: 1.2.5
       buildx_buildarch: "armv8"
       zig_buildarch: "arm"
       zig_buildos: "linux"
@@ -171,7 +166,6 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: 1.2.5
       buildx_buildarch: "arm64"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
@@ -183,7 +177,6 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: 1.2.5
       buildx_buildarch: "arm64"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
@@ -195,7 +188,6 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
-      dumb-init-version: 1.2.5
       buildx_buildarch: "arm64"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"

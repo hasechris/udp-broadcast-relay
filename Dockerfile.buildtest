@@ -14,10 +14,9 @@ ENV UBR_ENABLE_HDHOMERUN=0
 ENV UBR_ENABLE_WC3=0
 
 # install some debug tools
-RUN apk add --no-cache bash iproute2 procps iproute2-ss tcpdump
+RUN apk add --no-cache bash iproute2 procps iproute2-ss tcpdump dumb-init
 
 COPY --chmod=755 udp-broadcast-relay-redux /udp-broadcast-relay-redux
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
-COPY --chmod=755 dumb-init_${DUMB_INIT_VERSION}_${DUMB_INIT_ARCH} /dumb-init
 
-ENTRYPOINT ["/dumb-init", "-v", "/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/dumb-init", "-v", "/entrypoint.sh"]

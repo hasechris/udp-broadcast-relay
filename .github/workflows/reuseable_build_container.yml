@@ -7,9 +7,6 @@ on:
       artifact-name:
         required: true
         type: string
-      dumb-init-version:
-        required: true
-        type: string
       buildx_buildarch:
         required: true
         type: string
@@ -48,13 +45,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.artifact-name }}-${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }}-${{ inputs.zig_buildcpu }}
-      - name: Fetch dumb-init initlike exe from releases
-        uses: dsaltares/fetch-gh-release-asset@1.1.1
-        with:
-          repo: 'Yelp/dumb-init'
-          version: 'tags/v${{ inputs.dumb-init-version }}'
-          file: 'dumb-init_${{ inputs.dumb-init-version }}_${{ inputs.zig_buildarch }}'
-      - run: ls -la
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -63,8 +53,6 @@ jobs:
           context: .
           file: Dockerfile.${{ inputs.artifact-name }}
           platforms: ${{ inputs.zig_buildos }}/${{ inputs.buildx_buildarch }}
-          build-args: |
-            DUMB_INIT_VERSION=${{ inputs.dumb-init-version }}
-            DUMB_INIT_ARCH=${{ inputs.zig_buildarch }}
+
 
 ...
