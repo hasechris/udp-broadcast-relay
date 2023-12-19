@@ -135,7 +135,7 @@ jobs:
     with:
       artifact-name: buildtest
       dumb-init-version: 1.2.5
-      buildarch_buildx: "armv6"
+      buildx_buildarch: "armv6"
       zig_buildarch: "arm"
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
@@ -148,7 +148,7 @@ jobs:
     with:
       artifact-name: buildtest
       dumb-init-version: 1.2.5
-      buildarch_buildx: "armv7"
+      buildx_buildarch: "armv7"
       zig_buildarch: "arm"
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
@@ -160,7 +160,7 @@ jobs:
     with:
       artifact-name: buildtest
       dumb-init-version: 1.2.5
-      buildarch_buildx: "armv8"
+      buildx_buildarch: "armv8"
       zig_buildarch: "arm"
       zig_buildos: "linux"
       zig_buildlibc: "musleabihf"
@@ -172,7 +172,7 @@ jobs:
     with:
       artifact-name: buildtest
       dumb-init-version: 1.2.5
-      buildarch_buildx: "arm64"
+      buildx_buildarch: "arm64"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
@@ -184,7 +184,7 @@ jobs:
     with:
       artifact-name: buildtest
       dumb-init-version: 1.2.5
-      buildarch_buildx: "arm64"
+      buildx_buildarch: "arm64"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
@@ -196,7 +196,7 @@ jobs:
     with:
       artifact-name: buildtest
       dumb-init-version: 1.2.5
-      buildarch_buildx: "arm64"
+      buildx_buildarch: "arm64"
       zig_buildarch: "aarch64"
       zig_buildos: "linux"
       zig_buildlibc: "musl"
