@@ -7,21 +7,6 @@ on:
       artifact-name:
         required: true
         type: string
-      # zig_buildarch:
-      #   required: true
-      #   type: string
-      # zig_buildos:
-      #   required: true
-      #   type: string
-      # zig_buildlibc:
-      #   required: true
-      #   type: string
-      # zig_buildcpu:
-      #   required: false
-      #   type: string
-      # zig_version:
-      #   required: true
-      #   type: string
 
 jobs:
   build_and_upload:
