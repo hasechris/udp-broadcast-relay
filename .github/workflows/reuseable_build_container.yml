@@ -10,21 +10,6 @@ on:
       registry_image:
         required: true
         type: string
-      # buildx_buildarch:
-      #   required: true
-      #   type: string
-      # zig_buildarch:
-      #   required: true
-      #   type: string
-      # zig_buildos:
-      #   required: true
-      #   type: string
-      # zig_buildlibc:
-      #   required: true
-      #   type: string
-      # zig_buildcpu:
-      #   required: false
-      #   type: string
     secrets:
       DOCKER_USERNAME:
         required: true
