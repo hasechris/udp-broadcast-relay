@@ -48,7 +48,7 @@ jobs:
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ inputs.registry_image }}:${{ steps.meta.outputs.version }}          
+          docker buildx imagetools inspect ${{ inputs.registry_image }}:${{ inputs.artifact-name }}          
 
 
 ...
