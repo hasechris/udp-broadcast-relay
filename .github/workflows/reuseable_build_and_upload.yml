@@ -89,15 +89,21 @@ jobs:
               buildx_buildarch: "arm64/v8"
 
     steps:
+      - name: show matrix variables
+        run: echo 'arch-${{ matrix.arch }} zig_buildarch-${{ matrix.zig_buildarch }} zig_buildos-${{ matrix.zig_buildos }} zig_buildlibc-${{ matrix.zig_buildlibc }} zig_buildcpu-${{ matrix.zig_buildcpu }} zig_version-${{ matrix.zig_version }} buildx_buildarch-${{ matrix.buildx_buildarch }}'
+
       - uses: actions/checkout@v4
+
       - uses: goto-bus-stop/setup-zig@v2
         with:
           version: ${{ matrix.zig_version }}
+      
       - name: Compile udp-broadcast-relay-redux with Zig Compiler
         run: zig build-exe -target ${{ matrix.zig_buildarch }}-${{ matrix.zig_buildos }}-${{ matrix.zig_buildlibc }} -mcpu=${{ matrix.zig_buildcpu }} -lc -O ReleaseSmall --name udp-broadcast-relay-redux main.c
+      
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.artifact-name }}-${{ matrix.zig_buildarch }}-${{ matrix.zig_buildos }}-${{ matrix.zig_buildlibc }}-${{ matrix.zig_buildcpu }}
+          name: ${{ inputs.artifact-name }}-${{ matrix.arch }}
           path: udp-broadcast-relay-redux
-  
+
 ...

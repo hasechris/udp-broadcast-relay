@@ -118,7 +118,7 @@ jobs:
       
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}-${{ matrix.zig_buildarch }}-${{ matrix.zig_buildos }}-${{ matrix.zig_buildlibc }}-${{ matrix.zig_buildcpu }}
+          name: ${{ inputs.artifact-name }}-${{ matrix.arch }}
       
       - name: Build and push by digest
         id: build
