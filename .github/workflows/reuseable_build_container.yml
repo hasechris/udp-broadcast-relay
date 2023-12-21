@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: ["amd64", "386", "arm_v6", "arm_v7", "arm64_v8"]
+        arch: ["amd64", "386", "arm_v6_arm1176jzf", "arm_v7_cortex_a7", "arm64_v8_cortex_a53", "arm64_v8_cortex_a72", "arm64_v8_cortex_a76"]
         include:
           - arch: amd64
             zig_buildarch: "x86_64"
