@@ -18,188 +18,200 @@ jobs:
   #
   # Build udp-broadcast-relay-redux software for multiple arch
   #
-  build_and_upload_amd64:
+  build_and_upload_matrix:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
     with:
       artifact-name: buildtest
-      zig_buildarch: "x86_64"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "x86_64_v4"
-      zig_version: 0.11.0
 
-  build_and_upload_x86:
-    uses: ./.github/workflows/reuseable_build_and_upload.yml
-    with:
-      artifact-name: buildtest
-      zig_buildarch: "x86"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "i686"
-      zig_version: 0.11.0
+  # build_and_upload_amd64:
+  #   uses: ./.github/workflows/reuseable_build_and_upload.yml
+  #   with:
+  #     artifact-name: buildtest
+  #     zig_buildarch: "x86_64"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "x86_64_v4"
+  #     zig_version: 0.11.0
 
-  build_and_upload_raspi1_raspicm1_raspizero1:
-    uses: ./.github/workflows/reuseable_build_and_upload.yml
-    with:
-      artifact-name: buildtest
-      zig_buildarch: "arm"
-      zig_buildos: "linux"
-      zig_buildlibc: "musleabihf"
-      zig_buildcpu: "arm1176jzf_s"
-      zig_version: 0.11.0
+  # build_and_upload_x86:
+  #   uses: ./.github/workflows/reuseable_build_and_upload.yml
+  #   with:
+  #     artifact-name: buildtest
+  #     zig_buildarch: "x86"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "i686"
+  #     zig_version: 0.11.0
 
-  build_and_upload_raspi2:
-    uses: ./.github/workflows/reuseable_build_and_upload.yml
-    with:
-      artifact-name: buildtest
-      zig_buildarch: "arm"
-      zig_buildos: "linux"
-      zig_buildlibc: "musleabihf"
-      zig_buildcpu: "cortex_a7"
-      zig_version: 0.11.0
+  # build_and_upload_raspi1_raspicm1_raspizero1:
+  #   uses: ./.github/workflows/reuseable_build_and_upload.yml
+  #   with:
+  #     artifact-name: buildtest
+  #     zig_buildarch: "arm"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musleabihf"
+  #     zig_buildcpu: "arm1176jzf_s"
+  #     zig_version: 0.11.0
 
-  build_and_upload_raspi2v12_raspi3_raspizero2w_64bit:
-    uses: ./.github/workflows/reuseable_build_and_upload.yml
-    with:
-      artifact-name: buildtest
-      zig_buildarch: "aarch64"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "cortex_a53"
-      zig_version: 0.11.0
+  # build_and_upload_raspi2:
+  #   uses: ./.github/workflows/reuseable_build_and_upload.yml
+  #   with:
+  #     artifact-name: buildtest
+  #     zig_buildarch: "arm"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musleabihf"
+  #     zig_buildcpu: "cortex_a7"
+  #     zig_version: 0.11.0
 
-  build_and_upload_raspi4_raspicm4_rpi400:
-    uses: ./.github/workflows/reuseable_build_and_upload.yml
-    with:
-      artifact-name: buildtest
-      zig_buildarch: "aarch64"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "cortex_a72"
-      zig_version: 0.11.0
+  # build_and_upload_raspi2v12_raspi3_raspizero2w_64bit:
+  #   uses: ./.github/workflows/reuseable_build_and_upload.yml
+  #   with:
+  #     artifact-name: buildtest
+  #     zig_buildarch: "aarch64"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "cortex_a53"
+  #     zig_version: 0.11.0
 
-  build_and_upload_raspi5:
-    uses: ./.github/workflows/reuseable_build_and_upload.yml
-    with:
-      artifact-name: buildtest
-      zig_buildarch: "aarch64"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "cortex_a76"
-      zig_version: 0.11.0
+  # build_and_upload_raspi4_raspicm4_rpi400:
+  #   uses: ./.github/workflows/reuseable_build_and_upload.yml
+  #   with:
+  #     artifact-name: buildtest
+  #     zig_buildarch: "aarch64"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "cortex_a72"
+  #     zig_version: 0.11.0
+
+  # build_and_upload_raspi5:
+  #   uses: ./.github/workflows/reuseable_build_and_upload.yml
+  #   with:
+  #     artifact-name: buildtest
+  #     zig_buildarch: "aarch64"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "cortex_a76"
+  #     zig_version: 0.11.0
 
   ##############################################
   #
   # Build container
   #
-  build_container_amd64:
-    needs: build_and_upload_amd64
+  build_container_matrix:
+    needs: build_and_upload_matrix
     uses: ./.github/workflows/reuseable_build_container.yml
     secrets: inherit
     with:
       artifact-name: buildtest
-      buildx_buildarch: "amd64"
-      zig_buildarch: "x86_64"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "x86_64_v4"
+    
+  # build_container_amd64:
+  #   needs: build_and_upload_amd64
+  #   uses: ./.github/workflows/reuseable_build_container.yml
+  #   secrets: inherit
+  #   with:
+  #     artifact-name: buildtest
+  #     buildx_buildarch: "amd64"
+  #     zig_buildarch: "x86_64"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "x86_64_v4"
 
-  build_container_x86:
-    needs: build_and_upload_x86
-    uses: ./.github/workflows/reuseable_build_container.yml
-    secrets: inherit
-    with:
-      artifact-name: buildtest
-      buildx_buildarch: "386"
-      zig_buildarch: "x86"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "i686"
+  # build_container_x86:
+  #   needs: build_and_upload_x86
+  #   uses: ./.github/workflows/reuseable_build_container.yml
+  #   secrets: inherit
+  #   with:
+  #     artifact-name: buildtest
+  #     buildx_buildarch: "386"
+  #     zig_buildarch: "x86"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "i686"
 
-  build_container_raspi1_raspicm1_raspizero1:
-    needs: build_and_upload_raspi1_raspicm1_raspizero1
-    uses: ./.github/workflows/reuseable_build_container.yml
-    secrets: inherit
-    with:
-      artifact-name: buildtest
-      buildx_buildarch: "arm/v6"
-      zig_buildarch: "arm"
-      zig_buildos: "linux"
-      zig_buildlibc: "musleabihf"
-      zig_buildcpu: "arm1176jzf_s"
+  # build_container_raspi1_raspicm1_raspizero1:
+  #   needs: build_and_upload_raspi1_raspicm1_raspizero1
+  #   uses: ./.github/workflows/reuseable_build_container.yml
+  #   secrets: inherit
+  #   with:
+  #     artifact-name: buildtest
+  #     buildx_buildarch: "arm/v6"
+  #     zig_buildarch: "arm"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musleabihf"
+  #     zig_buildcpu: "arm1176jzf_s"
 
-  build_container_raspi2:
-    needs: build_and_upload_raspi2
-    uses: ./.github/workflows/reuseable_build_container.yml
-    secrets: inherit
-    with:
-      artifact-name: buildtest
-      buildx_buildarch: "arm/v7"
-      zig_buildarch: "arm"
-      zig_buildos: "linux"
-      zig_buildlibc: "musleabihf"
-      zig_buildcpu: "cortex_a7"
+  # build_container_raspi2:
+  #   needs: build_and_upload_raspi2
+  #   uses: ./.github/workflows/reuseable_build_container.yml
+  #   secrets: inherit
+  #   with:
+  #     artifact-name: buildtest
+  #     buildx_buildarch: "arm/v7"
+  #     zig_buildarch: "arm"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musleabihf"
+  #     zig_buildcpu: "cortex_a7"
 
-  build_container_raspi2v12_raspi3_raspizero2w_64bit:
-    needs: build_and_upload_raspi2v12_raspi3_raspizero2w_64bit
-    uses: ./.github/workflows/reuseable_build_container.yml
-    secrets: inherit
-    with:
-      artifact-name: buildtest
-      buildx_buildarch: "arm64/v8"
-      zig_buildarch: "aarch64"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "cortex_a53"
-  build_container_raspi4_raspicm4_rpi400:
-    needs: build_and_upload_raspi4_raspicm4_rpi400
-    uses: ./.github/workflows/reuseable_build_container.yml
-    secrets: inherit
-    with:
-      artifact-name: buildtest
-      buildx_buildarch: "arm64/v8"
-      zig_buildarch: "aarch64"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "cortex_a72"
-  build_container_raspi5:
-    needs: build_and_upload_raspi5
-    uses: ./.github/workflows/reuseable_build_container.yml
-    secrets: inherit
-    with:
-      artifact-name: buildtest
-      buildx_buildarch: "arm64/v8"
-      zig_buildarch: "aarch64"
-      zig_buildos: "linux"
-      zig_buildlibc: "musl"
-      zig_buildcpu: "cortex_a76"
+  # build_container_raspi2v12_raspi3_raspizero2w_64bit:
+  #   needs: build_and_upload_raspi2v12_raspi3_raspizero2w_64bit
+  #   uses: ./.github/workflows/reuseable_build_container.yml
+  #   secrets: inherit
+  #   with:
+  #     artifact-name: buildtest
+  #     buildx_buildarch: "arm64/v8"
+  #     zig_buildarch: "aarch64"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "cortex_a53"
+  # build_container_raspi4_raspicm4_rpi400:
+  #   needs: build_and_upload_raspi4_raspicm4_rpi400
+  #   uses: ./.github/workflows/reuseable_build_container.yml
+  #   secrets: inherit
+  #   with:
+  #     artifact-name: buildtest
+  #     buildx_buildarch: "arm64/v8"
+  #     zig_buildarch: "aarch64"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "cortex_a72"
+  # build_container_raspi5:
+  #   needs: build_and_upload_raspi5
+  #   uses: ./.github/workflows/reuseable_build_container.yml
+  #   secrets: inherit
+  #   with:
+  #     artifact-name: buildtest
+  #     buildx_buildarch: "arm64/v8"
+  #     zig_buildarch: "aarch64"
+  #     zig_buildos: "linux"
+  #     zig_buildlibc: "musl"
+  #     zig_buildcpu: "cortex_a76"
 
 
   ##############################################
   #
   # get all container images, merge and push
   #
-  merge_tags:
-    runs-on: ubuntu-latest
-    needs:
-      - build_container_amd64
-      - build_container_x86
-      - build_container_raspi1_raspicm1_raspizero1
-      - build_container_raspi2
-      - build_container_raspi2v12_raspi3_raspizero2w_64bit
-      - build_container_raspi4_raspicm4_rpi400
-      - build_container_raspi5
-    strategy:
-      matrix:
-        buildxarch: ["amd64", "386", "arm_v6", "arm_v7", "arm64_v8"]
-    steps:
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: "Download multiarch tags"
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/udp-broadcast-relay:buildtest-${{ matrix.buildxarch }}
+  # merge_tags:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - build_container_amd64
+  #     - build_container_x86
+  #     - build_container_raspi1_raspicm1_raspizero1
+  #     - build_container_raspi2
+  #     - build_container_raspi2v12_raspi3_raspizero2w_64bit
+  #     - build_container_raspi4_raspicm4_rpi400
+  #     - build_container_raspi5
+  #   strategy:
+  #     matrix:
+  #       buildxarch: ["amd64", "386", "arm_v6", "arm_v7", "arm64_v8"]
+  #   steps:
+  #     - name: Login to Docker Hub
+  #       uses: docker/login-action@v3
+  #       with:
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #     - name: "Download multiarch tags"
+  #       run: docker pull ${{ secrets.DOCKER_USERNAME }}/udp-broadcast-relay:buildtest-${{ matrix.buildxarch }}
         
 
 

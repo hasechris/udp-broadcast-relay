@@ -7,33 +7,101 @@ on:
       artifact-name:
         required: true
         type: string
-      buildx_buildarch:
-        required: true
-        type: string
-      zig_buildarch:
-        required: true
-        type: string
-      zig_buildos:
-        required: true
-        type: string
-      zig_buildlibc:
-        required: true
-        type: string
-      zig_buildcpu:
-        required: false
-        type: string
+      # buildx_buildarch:
+      #   required: true
+      #   type: string
+      # zig_buildarch:
+      #   required: true
+      #   type: string
+      # zig_buildos:
+      #   required: true
+      #   type: string
+      # zig_buildlibc:
+      #   required: true
+      #   type: string
+      # zig_buildcpu:
+      #   required: false
+      #   type: string
     secrets:
       DOCKER_USERNAME:
         required: true
       DOCKER_TOKEN:
         required: true
 
+env:
+  REGISTRY_IMAGE: hasechris92/udp-broadcast-relay
+
 jobs:
   build_container:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: ["amd64", "386", "arm_v6", "arm_v7", "arm64_v8"]
+        include:
+          - arch: amd64
+            zig_buildarch: "x86_64"
+            zig_buildos: "linux"
+            zig_buildlibc: "musl"
+            zig_buildcpu: "x86_64_v4"
+            zig_version: 0.11.0
+            buildx_buildarch: "amd64"
+          
+          - arch: "386"
+            zig_buildarch: "x86"
+            zig_buildos: "linux"
+            zig_buildlibc: "musl"
+            zig_buildcpu: "i686"
+            zig_version: 0.11.0
+            buildx_buildarch: "386"
+          
+          - arch: "arm_v6_arm1176jzf"
+            zig_buildarch: "arm"
+            zig_buildos: "linux"
+            zig_buildlibc: "musleabihf"
+            zig_buildcpu: "arm1176jzf_s"
+            zig_version: 0.11.0
+            buildx_buildarch: "arm/v6"
+          
+          - arch: "arm_v7_cortex_a7"
+            zig_buildarch: "arm"
+            zig_buildos: "linux"
+            zig_buildlibc: "musleabihf"
+            zig_buildcpu: "cortex_a7"
+            zig_version: 0.11.0
+            buildx_buildarch: "arm/v7"
+          
+          - arch: "arm64_v8_cortex_a53"
+            zig_buildarch: "aarch64"
+            zig_buildos: "linux"
+            zig_buildlibc: "musl"
+            zig_buildcpu: "cortex_a53"
+            zig_version: 0.11.0
+            buildx_buildarch: "arm64/v8"
+          
+          - arch: "arm64_v8_cortex_a72"
+            zig_buildarch: "aarch64"
+            zig_buildos: "linux"
+            zig_buildlibc: "musl"
+            zig_buildcpu: "cortex_a72"
+            zig_version: 0.11.0
+            buildx_buildarch: "arm64/v8"
+
+          - arch: "arm64_v8_cortex_a76"
+            zig_buildarch: "aarch64"
+            zig_buildos: "linux"
+            zig_buildlibc: "musl"
+            zig_buildcpu: "cortex_a76"
+            zig_version: 0.11.0
+            buildx_buildarch: "arm64/v8"
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
+      
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -50,16 +118,31 @@ jobs:
       
       - uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}-${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }}-${{ inputs.zig_buildcpu }}
+          name: ${{ inputs.artifact-name }}-${{ matrix.zig_buildarch }}-${{ matrix.zig_buildos }}-${{ matrix.zig_buildlibc }}-${{ matrix.zig_buildcpu }}
       
       - name: Build and push by digest
         id: build
         uses: docker/build-push-action@v5
         with:
-          tags: ${{ secrets.DOCKER_USERNAME }}/udp-broadcast-relay:${{ inputs.artifact-name }}-${{ inputs.buildx_buildarch }}
+          #tags: ${{ secrets.DOCKER_USERNAME }}/udp-broadcast-relay:${{ inputs.artifact-name }}-${{ matrix.buildx_buildarch }}
           context: .
+          platforms: ${{ matrix.zig_buildos }}/${{ matrix.buildx_buildarch }}
+          labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile.${{ inputs.artifact-name }}
-          platforms: ${{ inputs.zig_buildos }}/${{ inputs.buildx_buildarch }}
-          push: true
+          #push: true
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
 
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
 ...

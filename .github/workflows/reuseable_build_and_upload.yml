@@ -7,37 +7,97 @@ on:
       artifact-name:
         required: true
         type: string
-      zig_buildarch:
-        required: true
-        type: string
-      zig_buildos:
-        required: true
-        type: string
-      zig_buildlibc:
-        required: true
-        type: string
-      zig_buildcpu:
-        required: false
-        type: string
-      zig_version:
-        required: true
-        type: string
+      # zig_buildarch:
+      #   required: true
+      #   type: string
+      # zig_buildos:
+      #   required: true
+      #   type: string
+      # zig_buildlibc:
+      #   required: true
+      #   type: string
+      # zig_buildcpu:
+      #   required: false
+      #   type: string
+      # zig_version:
+      #   required: true
+      #   type: string
 
 jobs:
   build_and_upload:
     runs-on: ubuntu-latest
     container:
       image: alpine:latest
+    strategy:
+        matrix:
+          arch: ["amd64", "386", "arm_v6", "arm_v7", "arm64_v8"]
+          include:
+            - arch: amd64
+              zig_buildarch: "x86_64"
+              zig_buildos: "linux"
+              zig_buildlibc: "musl"
+              zig_buildcpu: "x86_64_v4"
+              zig_version: 0.11.0
+              buildx_buildarch: "amd64"
+            
+            - arch: "386"
+              zig_buildarch: "x86"
+              zig_buildos: "linux"
+              zig_buildlibc: "musl"
+              zig_buildcpu: "i686"
+              zig_version: 0.11.0
+              buildx_buildarch: "386"
+            
+            - arch: "arm_v6_arm1176jzf"
+              zig_buildarch: "arm"
+              zig_buildos: "linux"
+              zig_buildlibc: "musleabihf"
+              zig_buildcpu: "arm1176jzf_s"
+              zig_version: 0.11.0
+              buildx_buildarch: "arm/v6"
+            
+            - arch: "arm_v7_cortex_a7"
+              zig_buildarch: "arm"
+              zig_buildos: "linux"
+              zig_buildlibc: "musleabihf"
+              zig_buildcpu: "cortex_a7"
+              zig_version: 0.11.0
+              buildx_buildarch: "arm/v7"
+            
+            - arch: "arm64_v8_cortex_a53"
+              zig_buildarch: "aarch64"
+              zig_buildos: "linux"
+              zig_buildlibc: "musl"
+              zig_buildcpu: "cortex_a53"
+              zig_version: 0.11.0
+              buildx_buildarch: "arm64/v8"
+            
+            - arch: "arm64_v8_cortex_a72"
+              zig_buildarch: "aarch64"
+              zig_buildos: "linux"
+              zig_buildlibc: "musl"
+              zig_buildcpu: "cortex_a72"
+              zig_version: 0.11.0
+              buildx_buildarch: "arm64/v8"
+
+            - arch: "arm64_v8_cortex_a76"
+              zig_buildarch: "aarch64"
+              zig_buildos: "linux"
+              zig_buildlibc: "musl"
+              zig_buildcpu: "cortex_a76"
+              zig_version: 0.11.0
+              buildx_buildarch: "arm64/v8"
+
     steps:
       - uses: actions/checkout@v4
       - uses: goto-bus-stop/setup-zig@v2
         with:
-          version: ${{ inputs.zig_version }}
+          version: ${{ matrix.zig_version }}
       - name: Compile udp-broadcast-relay-redux with Zig Compiler
-        run: zig build-exe -target ${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }} -mcpu=${{ inputs.zig_buildcpu }} -lc -O ReleaseSmall --name udp-broadcast-relay-redux main.c
+        run: zig build-exe -target ${{ matrix.zig_buildarch }}-${{ matrix.zig_buildos }}-${{ matrix.zig_buildlibc }} -mcpu=${{ matrix.zig_buildcpu }} -lc -O ReleaseSmall --name udp-broadcast-relay-redux main.c
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.artifact-name }}-${{ inputs.zig_buildarch }}-${{ inputs.zig_buildos }}-${{ inputs.zig_buildlibc }}-${{ inputs.zig_buildcpu }}
+          name: ${{ matrix.artifact-name }}-${{ matrix.zig_buildarch }}-${{ matrix.zig_buildos }}-${{ matrix.zig_buildlibc }}-${{ matrix.zig_buildcpu }}
           path: udp-broadcast-relay-redux
   
 ...
