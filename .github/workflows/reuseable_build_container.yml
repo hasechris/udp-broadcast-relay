@@ -60,5 +60,6 @@ jobs:
           context: .
           file: Dockerfile.${{ inputs.artifact-name }}
           platforms: ${{ inputs.zig_buildos }}/${{ inputs.buildx_buildarch }}
+          push: true
 
 ...
