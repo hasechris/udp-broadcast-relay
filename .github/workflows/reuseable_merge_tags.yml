@@ -40,13 +40,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      - run: echo "$DOCKER_METADATA_OUTPUT_JSON"
-      #- run: echo $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
 
       - name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
-          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") $(printf '${{ inputs.registry_image }}@sha256:%s ' *)
+          docker buildx imagetools create -t ${{ inputs.registry_image }}:${{ inputs.artifact-name }} $(printf '${{ inputs.registry_image }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
