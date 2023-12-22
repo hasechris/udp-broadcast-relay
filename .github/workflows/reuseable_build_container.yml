@@ -23,62 +23,26 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: ["amd64", "386", "arm_v6_arm1176jzf", "arm_v7_cortex_a7", "arm64_v8_cortex_a53", "arm64_v8_cortex_a72", "arm64_v8_cortex_a76"]
+        arch: ["amd64", "386", "arm_v6_arm1176jzf", "arm_v7", "arm64_v8"]
         include:
           - arch: amd64
-            zig_buildarch: "x86_64"
             zig_buildos: "linux"
-            zig_buildlibc: "musl"
-            zig_buildcpu: "x86_64_v4"
-            zig_version: 0.11.0
             buildx_buildarch: "amd64"
-          
+        
           - arch: "386"
-            zig_buildarch: "x86"
             zig_buildos: "linux"
-            zig_buildlibc: "musl"
-            zig_buildcpu: "i686"
-            zig_version: 0.11.0
             buildx_buildarch: "386"
           
           - arch: "arm_v6_arm1176jzf"
-            zig_buildarch: "arm"
             zig_buildos: "linux"
-            zig_buildlibc: "musleabihf"
-            zig_buildcpu: "arm1176jzf_s"
-            zig_version: 0.11.0
             buildx_buildarch: "arm/v6"
           
-          - arch: "arm_v7_cortex_a7"
-            zig_buildarch: "arm"
+          - arch: "arm_v7"
             zig_buildos: "linux"
-            zig_buildlibc: "musleabihf"
-            zig_buildcpu: "cortex_a7"
-            zig_version: 0.11.0
             buildx_buildarch: "arm/v7"
           
-          - arch: "arm64_v8_cortex_a53"
-            zig_buildarch: "aarch64"
+          - arch: "arm64_v8"
             zig_buildos: "linux"
-            zig_buildlibc: "musl"
-            zig_buildcpu: "cortex_a53"
-            zig_version: 0.11.0
-            buildx_buildarch: "arm64/v8"
-          
-          - arch: "arm64_v8_cortex_a72"
-            zig_buildarch: "aarch64"
-            zig_buildos: "linux"
-            zig_buildlibc: "musl"
-            zig_buildcpu: "cortex_a72"
-            zig_version: 0.11.0
-            buildx_buildarch: "arm64/v8"
-
-          - arch: "arm64_v8_cortex_a76"
-            zig_buildarch: "aarch64"
-            zig_buildos: "linux"
-            zig_buildlibc: "musl"
-            zig_buildcpu: "cortex_a76"
-            zig_version: 0.11.0
             buildx_buildarch: "arm64/v8"
     steps:
       - name: Set up QEMU
@@ -111,12 +75,10 @@ jobs:
         id: build
         uses: docker/build-push-action@v5
         with:
-          #tags: ${{ secrets.DOCKER_USERNAME }}/udp-broadcast-relay:${{ inputs.artifact-name }}-${{ matrix.buildx_buildarch }}
           context: .
           platforms: ${{ matrix.zig_buildos }}/${{ matrix.buildx_buildarch }}
           labels: ${{ steps.meta.outputs.labels }}
           file: Dockerfile.${{ inputs.artifact-name }}
-          #push: true
           outputs: type=image,name=${{ inputs.registry_image }},push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest

@@ -15,13 +15,12 @@ jobs:
       image: alpine:latest
     strategy:
         matrix:
-          arch: ["amd64", "386", "arm_v6_arm1176jzf", "arm_v7_cortex_a7", "arm64_v8_cortex_a53", "arm64_v8_cortex_a72", "arm64_v8_cortex_a76"]
+          arch: ["amd64", "386", "arm_v6_arm1176jzf", "arm_v7", "arm64_v8"]
           include:
             - arch: amd64
               zig_buildarch: "x86_64"
               zig_buildos: "linux"
               zig_buildlibc: "musl"
-              zig_buildcpu: "x86_64_v4"
               zig_version: 0.11.0
               buildx_buildarch: "amd64"
             
@@ -29,7 +28,6 @@ jobs:
               zig_buildarch: "x86"
               zig_buildos: "linux"
               zig_buildlibc: "musl"
-              zig_buildcpu: "i686"
               zig_version: 0.11.0
               buildx_buildarch: "386"
             
@@ -41,49 +39,33 @@ jobs:
               zig_version: 0.11.0
               buildx_buildarch: "arm/v6"
             
-            - arch: "arm_v7_cortex_a7"
+            - arch: "arm_v7"
               zig_buildarch: "arm"
               zig_buildos: "linux"
               zig_buildlibc: "musleabihf"
-              zig_buildcpu: "cortex_a7"
               zig_version: 0.11.0
               buildx_buildarch: "arm/v7"
             
-            - arch: "arm64_v8_cortex_a53"
+            - arch: "arm64_v8"
               zig_buildarch: "aarch64"
               zig_buildos: "linux"
               zig_buildlibc: "musl"
-              zig_buildcpu: "cortex_a53"
-              zig_version: 0.11.0
-              buildx_buildarch: "arm64/v8"
-            
-            - arch: "arm64_v8_cortex_a72"
-              zig_buildarch: "aarch64"
-              zig_buildos: "linux"
-              zig_buildlibc: "musl"
-              zig_buildcpu: "cortex_a72"
-              zig_version: 0.11.0
-              buildx_buildarch: "arm64/v8"
-
-            - arch: "arm64_v8_cortex_a76"
-              zig_buildarch: "aarch64"
-              zig_buildos: "linux"
-              zig_buildlibc: "musl"
-              zig_buildcpu: "cortex_a76"
               zig_version: 0.11.0
               buildx_buildarch: "arm64/v8"
 
     steps:
-      - name: show matrix variables
-        run: echo 'arch-${{ matrix.arch }} zig_buildarch-${{ matrix.zig_buildarch }} zig_buildos-${{ matrix.zig_buildos }} zig_buildlibc-${{ matrix.zig_buildlibc }} zig_buildcpu-${{ matrix.zig_buildcpu }} zig_version-${{ matrix.zig_version }} buildx_buildarch-${{ matrix.buildx_buildarch }}'
-
       - uses: actions/checkout@v4
 
       - uses: goto-bus-stop/setup-zig@v2
         with:
           version: ${{ matrix.zig_version }}
       
-      - name: Compile udp-broadcast-relay-redux with Zig Compiler
+      - name: Compile udp-broadcast-relay-redux with Zig Compiler - without CPU option
+        if: ${{ ! matrix.zig_buildcpu }}
+        run: zig build-exe -target ${{ matrix.zig_buildarch }}-${{ matrix.zig_buildos }}-${{ matrix.zig_buildlibc }} -lc -O ReleaseSmall --name udp-broadcast-relay-redux main.c
+      
+      - name: Compile udp-broadcast-relay-redux with Zig Compiler - with CPU option
+        if: ${{ matrix.zig_buildcpu }}
         run: zig build-exe -target ${{ matrix.zig_buildarch }}-${{ matrix.zig_buildos }}-${{ matrix.zig_buildlibc }} -mcpu=${{ matrix.zig_buildcpu }} -lc -O ReleaseSmall --name udp-broadcast-relay-redux main.c
       
       - uses: actions/upload-artifact@v3
