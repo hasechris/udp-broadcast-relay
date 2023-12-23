@@ -18,7 +18,7 @@ nics=$(ls /sys/class/net/ | grep -i "eth" | sed 's/.*/--dev &/')
 #
 # check the needed options for debug and serviceuser
 #
-if [[ "${UBR_DEBUG}" == "true" ]] || [[ "${UBD_DEBUG}" == "1" ]]; then
+if [[ "${UBR_DEBUG}" == "true" ]] || [[ "${UBR_DEBUG}" == "1" ]]; then
     options+="-d "
 fi
 
@@ -45,12 +45,14 @@ if [[ "${UBR_ENABLE_SSDP}" == "true" ]] || [[ "${UBR_ENABLE_SSDP}" == "1" ]]; th
     ubrid_counter=$((ubrid_counter+1))
     list_of_predefined_ports+="1900 "
 fi
+
 if [[ "${UBR_ENABLE_LIFX_BULB}" == "true" ]] || [[ "${UBR_ENABLE_LIFX_BULB}" == "1" ]]; then
     echo "I shall start the LIFX Bulb Reflector on all interfaces. Starting now..."
     /udp-broadcast-relay-redux $options --id $ubrid_counter --port 56700 $nics &
     ubrid_counter=$((ubrid_counter+1))
     list_of_predefined_ports+="56700 "
 fi
+
 if [[ "${UBR_ENABLE_HDHOMERUN}" == "true" ]] || [[ "${UBR_ENABLE_HDHOMERUN}" == "1" ]]; then
     echo "I shall start the HDHomerun Reflector on all interfaces. Starting now..."
     /udp-broadcast-relay-redux $options --id $ubrid_counter --port 65001 $nics &
@@ -71,7 +73,7 @@ fi
 # Main Loop if user specified UBR_PORT portnumbers
 #
 if [ ! -z "${UBR_PORTS}" ]; then
-    echo "Compose defines a list of custom udp ports."
+    echo -e "\n\n####################\nCompose defines a list of custom udp ports."
     for port in $UBR_PORTS
     do
         echo "Starting Process for Port: $port"
