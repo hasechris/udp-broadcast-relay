@@ -6,23 +6,41 @@ on:
   pull_request: 
     types: closed
     branches: 
-      - main
+      - master
 
 jobs:
-  build_and_upload_amd64:
+  ##############################################
+  #
+  # Build udp-broadcast-relay-redux software for multiple arch
+  #
+  build_and_upload_matrix:
     uses: ./.github/workflows/reuseable_build_and_upload.yml
     with:
-      artifact-name: buildtest
-      buildarch_zig: "x86_64"
-      zigversion: 0.11.0
-  build_container_amd64:
-    needs: build_and_upload
+      artifact-name: release
+
+  ##############################################
+  #
+  # Build container
+  #
+  build_container_matrix:
+    needs: build_and_upload_matrix
     uses: ./.github/workflows/reuseable_build_container.yml
     secrets: inherit
     with:
-      artifact-name: buildtest
-      dumb-init-version: 1.2.5
-      buildarch_zig: "x86_64"
-      buildarch_buildx: "amd64"
+      artifact-name: release
+      registry_image: hasechris92/udp-broadcast-relay
+
+  ##############################################
+  #
+  # get all container images, merge and push
+  #
+  merge_tags:
+    needs: build_container_matrix
+    uses: ./.github/workflows/reuseable_merge_tags.yml
+    secrets: inherit
+    with:
+      artifact-name: $GITHUB_RUN_NUMBER
+      registry_image: hasechris92/udp-broadcast-relay
+
 
 ...

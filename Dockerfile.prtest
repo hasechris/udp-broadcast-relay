@@ -1,0 +1,19 @@
+# in buildtest container we dont use multistaged built because we dont create a nearly empty container
+FROM alpine:latest
+
+# ENV Defaults
+ENV UBR_SERVICEUSER=1
+ENV UBR_DEBUG=1
+ENV UBR_ENABLE_MDNS=1
+ENV UBR_ENABLE_SSDP=0
+ENV UBR_ENABLE_LIFX_BULB=0
+ENV UBR_ENABLE_HDHOMERUN=0
+ENV UBR_ENABLE_WC3=0
+
+# install some debug tools
+RUN apk add --no-cache bash iproute2 procps iproute2-ss tcpdump
+
+COPY --chmod=755 udp-broadcast-relay-redux /udp-broadcast-relay-redux
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
