@@ -45,6 +45,7 @@ jobs:
     secrets: inherit
     with:
       artifact-name: buildtest
+      digest-name: buildtest
       registry_image: hasechris92/udp-broadcast-relay
 
 

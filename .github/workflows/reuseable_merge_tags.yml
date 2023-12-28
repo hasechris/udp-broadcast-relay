@@ -7,6 +7,9 @@ on:
       artifact-name:
         required: true
         type: string
+      digest-name:
+        required: true
+        type: string
       registry_image:
         required: true
         type: string
@@ -23,7 +26,7 @@ jobs:
       - name: Download digests
         uses: actions/download-artifact@v3
         with:
-          name: digests
+          name: digests-${{ inputs.digest-name }}
           path: /tmp/digests
 
       - name: Set up Docker Buildx
