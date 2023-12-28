@@ -11,7 +11,7 @@ ENV UBR_ENABLE_HDHOMERUN=0
 ENV UBR_ENABLE_WC3=0
 
 # install some debug tools
-RUN apk add --no-cache bash iproute2 procps iproute2-ss tcpdump
+RUN apk add --no-cache bash iproute2 procps iproute2-ss tcpdump avahi-tools socat awake
 
 COPY --chmod=755 udp-broadcast-relay-redux /udp-broadcast-relay-redux
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
